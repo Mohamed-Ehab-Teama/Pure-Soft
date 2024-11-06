@@ -7,6 +7,7 @@ if (!$_SESSION['login']) {
     die;
 }
 
+// Post ID
 $id = $_GET['id'];
 
 ?>
@@ -23,7 +24,7 @@ $id = $_GET['id'];
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <title> Post <?php echo $row['post_id']; ?> </title>
+    <title> Post <?php echo $id; ?> </title>
 </head>
 
 <body>
@@ -99,7 +100,7 @@ $id = $_GET['id'];
 
         <!--                All Comments     -->
         <?php
-        $sql = 'SELECT * FROM comments';
+        $sql = 'SELECT * FROM comments INNER JOIN users ON users.id = comments.comment_created_by';
         $result = mysqli_query($connection, $sql);
         ?>
 
@@ -108,6 +109,7 @@ $id = $_GET['id'];
             <thead>
                 <tr>
                     <th scope="col"> Comment </th>
+                    <th scope="col"> Reply </th>
                 </tr>
             </thead>
             <tbody>
@@ -117,7 +119,20 @@ $id = $_GET['id'];
                 ?>
                         <tr>
                             <td>
-                                <?php echo $row['comment']; ?>
+                                <?php
+                                echo "<b><i><u>" . $row['name'] . "</u></i></b>";
+                                echo  " : " . "&nbsp";
+                                echo $row['comment'];
+                                ?>
+                            </td>
+                            <td>
+                                <form action="./reply.php?post_id=<?php echo $id; ?>&comment_id=<?php echo $row['comment_id']; ?>" method="post">
+                                    <div class="form-floating mt-3">
+                                        <textarea class="form-control" id="floatingTextarea" name="reply"></textarea>
+                                        <label for="floatingTextarea"> Reply.. </label>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary mt-3"> Make a Reply </button>
+                                </form>
                             </td>
                         </tr>
                 <?php
