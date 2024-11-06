@@ -32,7 +32,7 @@ require_once './connection.php';
             <div class="alert alert-success" role="alert">
                 <?php
                 echo $_SESSION['success'];
-                session_unset();
+                unset($_SESSION['success']);
                 ?>
             </div>
         <?php endif; ?>
@@ -44,7 +44,7 @@ require_once './connection.php';
             <div class="alert alert-danger" role="alert">
                 <?php
                 echo $_SESSION['error'];
-                session_unset();
+                unset($_SESSION['error']);
                 ?>
             </div>
         <?php endif; ?>

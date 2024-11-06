@@ -36,49 +36,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 
 
     // Check if email and password are correct:
-    $sql = 'SELECT * FROM users' ;
+    $sql = "SELECT * FROM users WHERE email = '$email' AND password = '$password'; " ;
 
     $result = mysqli_query( $connection, $sql );
 
-    $emails = [];
-    $passes = [];
+    $row = mysqli_fetch_assoc($result);
 
-    if ( mysqli_num_rows($result) > 0 )
+    // echo $row['id'];
+    // echo "<br>";
+    // echo $row['name'];
+    // echo "<br>";
+    // echo $row['email'];
+    // echo "<br>";
+    // echo $row['password'];
+    // die;
+
+    
+    if ( $row['email'] == $email and $row['password'] == $password )
     {
-        
-        while ($row = mysqli_fetch_assoc($result))
-        {
-            $emails[] = $row['email'];
-            $passes[] = $row['password'];
-        }
 
-        // echo $emails[0] . "<br>" . $email . "<br>" . $passes[0] . "<br>" . $password . "<br>" . count($emails) . "<br>" . count($passes);
-        // die;
+        $_SESSION['login'] = true;
+        $_SESSION['user_id'] = $row['id'];
+        header('location:index.php');
+        die;
 
-
-
-        for ($i = 0 ; $i <= count($emails) - 1 ; $i++ )
-        {
-            for ($j = 0 ; $j <= count($passes) - 1 ; $j++ )
-            {
-                if ( $emails[$i] == $email and $passes[$j] == $password )
-                {
-                    $_SESSION['login'] = 'true';
-                    header('location:index.php');
-                    die;
-                }else{
-                    continue;
-                }
-            }
-        }
-
+    }else{
         $_SESSION['error'] = " Incorrect Inputs ";
         header('location:login.php');
         die;
+    }
+
 
         
+
         
-    }
 
 
 

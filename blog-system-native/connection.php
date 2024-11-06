@@ -2,7 +2,7 @@
 
 session_start();
 
-$DBName = 'day01-blog-system';
+$DBName = 'blog-system-native';
 $serverName = 'localhost';
 $DBUserName = 'root';
 $DBPassword = '';
