@@ -120,10 +120,46 @@ $id = $_GET['id'];
                         <tr>
                             <td>
                                 <?php
-                                echo "<b><i><u>" . $row['name'] . "</u></i></b>";
-                                echo  " : " . "&nbsp";
-                                echo $row['comment'];
+                                    echo "<b><i><u>" . $row['name'] . "</u></i></b>";
+                                    echo  " : " . "&nbsp";
+                                    echo $row['comment'];
+                                    $comment_id = $row['comment_id'];
+                                    // echo "<pre>";
+                                    // var_dump($row);
+                                    // die;
+
                                 ?>
+                                <?php
+                                    $sql = " SELECT * FROM replies
+                                            JOIN comments
+                                            ON replies.comment_id = comments.comment_id
+                                            JOIN users
+                                            ON replies.user_id = users.id
+                                            WHERE comments.comment_id = $comment_id ";
+                                    $replies = mysqli_query( $connection, $sql );
+
+                                    if (mysqli_num_rows($replies) > 0):
+                                        while ($reply = mysqli_fetch_assoc($replies)):
+                                            // echo "<pre>";
+                                            // var_dump($reply);
+                                            // // die;
+                                ?>
+                                    <div class="card m-2 ms-5">
+                                        <div class="card-body">
+                                            <b><i>
+                                                <?php 
+                                                    echo $reply['name'] . ' : '; 
+                                                ?>
+                                            </i></b>
+                                            &nbsp;
+                                            <?php echo $reply['reply']; ?>
+                                        </div>
+                                    </div>
+                                <?php
+                                    endwhile;
+                                endif;
+                                ?>
+                                
                             </td>
                             <td>
                                 <form action="./reply.php?post_id=<?php echo $id; ?>&comment_id=<?php echo $row['comment_id']; ?>" method="post">
